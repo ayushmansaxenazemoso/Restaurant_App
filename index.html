@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant App</title>
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+    <h1>Restaurant Bill Generator</h1>
+    <div class="container">
+        <div class="tables-section">
+            <h2>Tables</h2>
+            <input type="text" placeholder="Search table" class="search-box" />
+            <div id="tables">
+                <div class="table-card" id='1' data-id="1" dropzone="true" ondrop="drop(event)"
+                    ondragover="allowDrop(event)" onclick="showModal('1')">
+                    Table - 1<br />Rs. <span>0</span> | Total items: <span>0</span>
+                </div>
+                <div class="table-card" id='2' data-id="2" dropzone="true" ondrop="drop(event)"
+                    ondragover="allowDrop(event)" onclick="showModal('2')">
+                    Table - 2<br />Rs. <span>0</span> | Total items: <span>0</span>
+                </div>
+                <div class="table-card" id='3' data-id="3" dropzone="true" ondrop="drop(event)"
+                    ondragover="allowDrop(event)" onclick="showModal('3')">
+                    Table - 3<br />Rs. <span>0</span> | Total items: <span>0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h2>Menu</h2>
+            <input type="text" placeholder="Search menu... by course, by food" class="search-box" id="menu-search" />
+
+
+            <div class="menu-item" draggable="true" ondragstart="drag(event)"
+                data-name="Crusty Garlic bread with Cheese" data-price="105">
+                <div class="item-name">Crusty Garlic bread with Cheese (Starter)</div>
+                <div class="item-price">105.00</div>
+            </div>
+
+            <div class="menu-item" draggable="true" ondragstart="drag(event)" data-name="French Fries" data-price="115">
+                <div class="item-name">French Fries (Starter)</div>
+                <div class="item-price">115.00</div>
+            </div>
+
+            <div class="menu-item" draggable="true" ondragstart="drag(event)"
+                data-name="Country Fries with Herbs & Chilli Flakes" data-price="150">
+                <div class="item-name">Butter Paneer (Main Course)</div>
+                <div class="item-price">150.00</div>
+            </div>
+
+            <div class="menu-item" draggable="true" ondragstart="drag(event)" data-name="Chilli Flakes" data-price="20">
+                <div class="item-name">Naan (Main Course)</div>
+                <div class="item-price">20.00</div>
+            </div>
+
+            <div class="menu-item" draggable="true" ondragstart="drag(event)" data-name="Paneer Sandwich"
+                data-price="100">
+                <div class="item-name">Paneer Sandwich (Snacks)</div>
+                <div class="item-price">100.00</div>
+            </div>
+
+            <div class="menu-item" draggable="true" ondragstart="drag(event)" data-name="Chicken Sandwich"
+                data-price="120">
+                <div class="item-name">Chicken Sandwich (Snacks)</div>
+                <div class="item-price">120.00</div>
+            </div>
+
+            <div class="menu-item" draggable="true" ondragstart="drag(event)" data-name="Veg Sandwich"
+                data-price="80">
+                <div class="item-name">Veg Sandwich (Snacks)</div>
+                <div class="item-price">80.00</div>
+            </div>
+            <div class="menu-item" draggable="true" ondragstart="drag(event)" data-name="Chicken Salad"
+                data-price="200">
+                <div class="item-name">Chicken Salad (Salads)</div>
+                <div class="item-price">200.00</div>
+            </div>
+            
+
+        </div>
+    </div>
+
+
+
+</body>
+
+<div id="order-modal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modal-title">Table - <span class="table-value"></span> | Order Details</h2>
+            <span class="close-btn" onclick="closeModal()">×</span>
+        </div>
+        <div id="order-items" class="order-items-list"></div>
+        <div class="modal-footer">
+            <div id="order-total">Total: ₹<span class="total-bill">0.00</span></div>
+            <button class="generate-btn" onclick="closelocal()">GENERATE BILL</button>
+        </div>
+    </div>
+</div>
+
+<script src="./script.js"></script>
+
+</html>
