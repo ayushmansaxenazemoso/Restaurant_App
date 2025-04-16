@@ -1,16 +1,14 @@
 // fetch from local storage
 let savedOrders = localStorage.getItem("tableOrders");
-let tableOrders = savedOrders
-  ? JSON.parse(savedOrders)
-  : { 1: [], 2: [], 3: [] };
+let tableOrders = savedOrders? JSON.parse(savedOrders): { 1: [], 2: [], 3: [] };
 
-let bill_number = localStorage.getItem("bill_number");
+let billNumber = localStorage.getItem("billNumber");
 
-if (bill_number == null) {
-  bill_number = 0;
-  localStorage.setItem("bill_number", bill_number);
+if (billNumber == null) {
+  billNumber = 0;
+  localStorage.setItem("billNumber", billNumber);
 } else {
-  bill_number = parseInt(bill_number);
+  billNumber = parseInt(billNumber);
 }
 
 let draggedItem = null;
@@ -104,25 +102,40 @@ function showModal(tableId) {
   });
 
   orderTotal.innerHTML = `Total: ₹<span class="total-bill">${total}</span>`;
+
+  // Update cursors
+  orders.forEach((orderItem, index) => {
+    updateCursorStyle(tableId, index); // Disables minus button if quantity is 1
+  });
 }
 
 function changeQuantity(tableId, index, change) {
   let item = tableOrders[tableId][index];
   item.quantity = Math.max(1, item.quantity + change);
 
-  let minusBtn = document.querySelectorAll(".minus")[index];
-
-  if (item.quantity == 1) {
-    minusBtn.disabled = true;
-    minusBtn.classList.add("disable_btn");
-  } else {
-    minusBtn.classList.remove("disable_btn");
-    minusBtn.disabled = false;
-  }
-
   updateTableCard(tableId);
   showModal(tableId);
   saveOrdersTolocalStorage();
+
+  updateCursorStyle(tableId, index);
+}
+
+function updateCursorStyle(tableId, index) {
+  const item = tableOrders[tableId][index];
+  const allRows = document.querySelectorAll(".order-row");
+
+  if (allRows[index]) {
+    const minusBtn = allRows[index].querySelector(".minus");
+    if (item.quantity === 1) {
+      minusBtn.style.cursor = "default";
+      minusBtn.disabled = true;
+      minusBtn.classList.add("disable_btn");
+    } else {
+      minusBtn.style.cursor = "pointer";
+      minusBtn.disabled = false;
+      minusBtn.classList.remove("disable_btn");
+    }
+  }
 }
 
 function deleteItem(tableId, index) {
@@ -155,8 +168,8 @@ function closelocal() {
   let tableId = modal.getAttribute("data-table-id");
 
   if (confirm("Bill has been generated")) {
-    bill_number++;
-    localStorage.setItem("bill_number", bill_number);
+    billNumber++;
+    localStorage.setItem("billNumber", billNumber);
 
     let orders = tableOrders[tableId];
     let totalItems = 0;
@@ -169,7 +182,7 @@ function closelocal() {
       orderDetails += `${item.name} - ₹${item.price} x ${item.quantity}\n`;
     });
 
-    let content = `Bill Number: ${bill_number}
+    let content = `Bill Number: ${billNumber}
   Table ID: ${tableId}
 
   Order Details:
@@ -178,7 +191,7 @@ function closelocal() {
   Total Bill: ₹${totalBill}
   `;
 
-    let filename = `bill_number_${bill_number}.txt`;
+    let filename = `billNumber_${billNumber}.txt`;
     let file = new Blob([content], { type: "text/plain" });
 
     let a = document.createElement("a");
@@ -204,10 +217,6 @@ function closeModal() {
     tab.style.backgroundColor = "#e8f4ff";
   }
 }
-
-
-
-
 
 document.querySelectorAll(".search-box")[0].addEventListener("input", function (e) {
     let searchValue = e.target.value.toLowerCase();
@@ -245,9 +254,11 @@ function updateQuantityFromInput(tableId, index, newQuantity) {
   updateTableCard(tableId);
   showModal(tableId);
   saveOrdersTolocalStorage();
+
+  updateCursorStyle(tableId, index);
 }
 
-// update
+// update on load
 Object.keys(tableOrders).forEach((tableId) => {
   updateTableCard(tableId);
 });
